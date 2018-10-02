@@ -5,24 +5,43 @@ This was done by initially having the LED blink at a specified rate then would c
 
 # Inputs and Outputs
 MSP430G2553:
+
 Inputs: 
+
 volatile unsigned int t1 = 0;                // record timer at button press
+
 volatile unsigned int t2 = 1000;             // record timer at button release
+
 volatile unsigned int c1 = 0;                // record number at button press
+
 volatile unsigned int c2 = 0;                // record number at button release
+
 volatile unsigned int Ccount = 0;            // count every cycle of the timer
+
 volatile unsigned int b = 0;                 // keeps track of up/down mode for the button
+
 P1.3 Button
+
 Outputs:
+
 P1.0 LED
 
 MSP430FR2311:
+
 Inputs:
+
 P1DIR &= ~BIT1;                         // configure P1.1 as input (Button)
+
 volatile unsigned int i;                // volatile to prevent optimization
+
 int a = 1;                              // blink speed state: 0 - off, 1 - slow, 2 - medium, 3 - fast
+
 int b = 0;                              // counter to set blink interval - waits to reach x
+
 int c = 8;                              // blink interval - the higher the slower the blink
+
 int d;
+
 Outputs:
+
 P1DIR |= 0x01;                          // Set P1.0 to output direction (LED)
