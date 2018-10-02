@@ -1,12 +1,28 @@
 # Button Based Delay
-Now that you have begun to familiarize yourself with the TIMER modules, why don't we make an interesting change to our code from the last lab.
+This was done on two different boards, the MSP430G2553 and the MSP430FR2311.This part of the lab the task was to have an LED blink at a rate corresponding to how long a button was pressed. For example, holding the button for 5 seconds will casuse the LED blinks once every 5 seconds.
 
-## Task
-Setup your microcontroller to initially blink and LED at a rate of 10Hz upon restarting or powering up. Then utilizing one of the buttons on board, a user should be able to set the delay or blinking rate of the LED by holding down a button. The duration in which the button is depressed should then become the new rate at which the LED blinks. As previously stated, you most likely will want to take advantage of the fact that TIMER modules exist and see if you can let them do a bulk of the work for you.
+This was done by initially having the LED blink at a specified rate then would change on the interrupt, button press. When the button was pressed the interrupt begins and a timer begins to count the amount of time it is held down for, then once the button is released the timer turns off and the time is stored, timer is reset, set back to up mode from contniuous mode of counting the time, the interrupt flags are reset as well. At this time the LED blinks at the rate corresponding to the length of time the button was pressed for
 
-### Extra Work
-## Reset Button
-What is a piece of electronics without a reset button? Instead of relying on resetting your processor using the built in reset circuitry, why not instead use another button to reset the rate back to 10Hz.
+# Inputs and Outputs
+MSP430G2553:
+Inputs: 
+volatile unsigned int t1 = 0;                // record timer at button press
+volatile unsigned int t2 = 1000;             // record timer at button release
+volatile unsigned int c1 = 0;                // record number at button press
+volatile unsigned int c2 = 0;                // record number at button release
+volatile unsigned int Ccount = 0;            // count every cycle of the timer
+volatile unsigned int b = 0;                 // keeps track of up/down mode for the button
+P1.3 Button
+Outputs:
+P1.0 LED
 
-## Button Based Hertz
-Most likely using two buttons, what if instead of making a delay loop based on the time, the user could instead enter a mode where the number of times they pressed the button would become the number in Hz of the blinking rate? How do you think you would implement that with just one button?
+MSP430FR2311:
+Inputs:
+P1DIR &= ~BIT1;                         // configure P1.1 as input (Button)
+volatile unsigned int i;                // volatile to prevent optimization
+int a = 1;                              // blink speed state: 0 - off, 1 - slow, 2 - medium, 3 - fast
+int b = 0;                              // counter to set blink interval - waits to reach x
+int c = 8;                              // blink interval - the higher the slower the blink
+int d;
+Outputs:
+P1DIR |= 0x01;                          // Set P1.0 to output direction (LED)
